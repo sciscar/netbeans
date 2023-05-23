@@ -1,0 +1,29 @@
+version: '3.3' 
+services:
+  netbeans-docker:
+    image: openkbs/netbeans-docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: netbeans-docker
+    environment:
+      - DISPLAY=${DISPLAY:-localhost:0}
+      - USER_ID=${USER_ID:-1000}
+      - GROUP_ID=${GROUP_ID:-1000}
+    #env_file:
+    #  - ./.env
+    group_add:
+      - audio
+      - video
+    devices:
+      - /dev/snd:/dev/snd
+    volumes:
+      - /etc/hosts:/etc/hosts 
+      - /dev/shm:/dev/shm
+      - /tmp/.X11-unix:/tmp/.X11-unix 
+      - ./.cache:/home/developer/.cache
+      - ./.netbeans:/home/developer/.netbeans
+      - ./data:/home/developer/data
+      - ./workspace:/home/developer/workspace
+      
+      --security-opt apparmor:unconfined --name netbeansabdo --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" openkbs/netbeans
